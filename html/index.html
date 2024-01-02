@@ -15,7 +15,6 @@
             var currentMonth = new Date().getMonth() + 1;
             var currentDay = new Date().getDate();
 
-
             for (var i = 1; i <= 31; i++) {
                 var option = document.createElement("option");
                 option.value = i;
@@ -47,8 +46,26 @@
                 }
             }
         }
+
+        function displayImage() {
+            var fileInput = document.getElementById('fileInput');
+            var image = document.getElementsByClassName('image')[0];
+
+            fileInput.addEventListener('change', function () {
+                var file = fileInput.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        image.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             populateDropdowns();
+            displayImage();
         });
     </script>
 </head>
