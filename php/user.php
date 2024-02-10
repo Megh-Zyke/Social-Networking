@@ -1,3 +1,27 @@
+    <?php
+    include 'connection.php';   
+    
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: login.php');
+        exit();
+    }
+
+    $user_id = $_SESSION['user_id'];
+
+    
+
+    // Fetch user bio from the database
+    $user_id = $_SESSION['user_id'];
+    $select_bio = $conn->prepare("SELECT bio , profile_image_url  FROM users WHERE user_id = ?");
+    $select_bio->bind_param("i", $user_id);
+    $select_bio->execute();
+    $select_bio->bind_result($default_bio , $profile);
+    $select_bio->fetch();
+    $select_bio->close();
+
+
+    ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +45,77 @@
         function closePage() {
             document.querySelector(".addPostsPage").style.display = "none";
         }
-    
+
+        function confirmDelete() {
+        var result = confirm("Are you sure you want to delete this post?");
+        return result;
+    }
+
+    function editBio() {
+            var bioElement = document.querySelector(".bio textarea");
+            bioElement.removeAttribute("readonly");
+            bioElement.focus();
+            bioElement.selectionStart = bioElement.selectionEnd = bioElement.value.length;
+            var bioButton = document.querySelector(".bioEditButton");
+            bioButton.textContent = "Save Bio";
+            bioButton.onclick = saveBio;
+        }
+
+    function saveBio() {
+            var bioElement = document.querySelector(".bio textarea");
+            var newBio = bioElement.value.trim();
+            bioElement.setAttribute("readonly", "readonly");
+
+            var bioButton = document.querySelector(".bioEditButton");
+            bioButton.textContent = "Edit Bio";
+            bioButton.onclick = editBio;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "update_bio.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    
+                    console.log("Bio updated successfully");
+                } else {
+                   
+                    console.error("Error updating bio: " + xhr.responseText);
+                }
+            }
+        };
+    xhr.send("bio=" + encodeURIComponent(newBio)); // Send the updated bio data
+    }
+
+    function editPost(postId) {
+        console.log("Editing post with ID: " + postId);
+        var postTextElement = document.getElementById("post" + postId);
+        console.log();
+        var updatedPostText = prompt("Enter the updated post text:" , postTextElement.textContent);
+            if (updatedPostText !== null) {
+            updatePost(postId, updatedPostText);
+        }
+    }
+
+    function updatePost(postId, updatedPostText) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "update_post.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log("Post updated successfully");
+                    // Update the post text on the page
+                    document.querySelector("#postText_" + postId).textContent = updatedPostText;
+                } else {
+                    console.error("Error updating post: " + xhr.responseText);
+                }
+            }
+            };
+            xhr.send("postId=" + postId + "&postText=" + encodeURIComponent(updatedPostText));
+    }
+
+
       
     </script>
     
@@ -35,21 +129,19 @@
     <main>
         <!-- User profile main content section -->
         <!-- Add your main content here -->
-        
-<?php
-    include 'connection.php';
-    
-?>
-
         <div class="mainPage">
             <div class="userInformation">
+                <div>
                 <div class="Info">
-                    <h1>Intro</h1>
-                    <div class = "bio">
-                        <p>Hi, I'm Mai Sakurajima. I'm a third year high school student and a famous actress. I'm also a member of the school's science club. I'm currently dating Sakuta Azusagawa. </p>
-                        <button class="bioEditButton"> Edit Bio </button>
+                    <div>
+                        <h1>Intro</h1>
                     </div>
-
+                    
+                    <div class = "bio">
+                        <textarea readonly rows= 4><?php echo $default_bio; ?></textarea>
+                        <button class="bioEditButton" onclick="editBio()"> Edit Bio </button>
+                    </div>
+                </div>
                 </div>
                     
                 <div class="friendRequests">
@@ -230,7 +322,7 @@
                 <div class="addPosts">
                     <div class="addPost">
                         <div class="profileIconDiv">
-                            <img src="" alt="" class="profileIcon">
+                            <img src= <?php echo $profile; ?> alt="" class="profileIcon">
                         </div>
                         
                         <div class="PostsAdd">
@@ -259,7 +351,8 @@
                 <div class="usersPosts">
 
                 <?php
-$sql = "SELECT * FROM posts ORDER BY post_date ASC";
+$sql = "SELECT * FROM posts, users where posts.user_id = users.user_id ORDER BY post_date ASC";
+
 $result = $conn->query($sql);
 
 $posts = array();
@@ -273,20 +366,41 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
 ?>
     <div class="post">
         <div class="userDetails">
-            <div class="userImageDiv">
-                <img src="../images/profilePicture.png" alt="profile picture" class="userImageImg">
-            </div>
-            <div>
-                <div class="userName">
-                    <h2>Sakuta Azusagawa</h2>
+            
+            <div class= "userInfoDetails">
+                
+                <div class="userImageDiv">
+                    <img src=<?php echo $profile; ?> alt="profile picture" class="userImageImg">
                 </div>
-                <div class="date">
-                <?php
-                    $postDate = new DateTime($row['post_date']);
-                    echo $postDate->format('d-m-Y'); 
-                    ?>
+            
+                <div>
+                    <div class="userName">
+                        <h2><?php echo $row['first_name']. ' ' . $row['last_name'] ?> </h2>
+                    </div>
+                    
+                    <div class="date">
+                        <?php
+                            $postDate = new DateTime($row['post_date']);
+                            echo $postDate->format('d-m-Y'); 
+                        ?>
+                    </div>
                 </div>
             </div>
+
+            
+                <div class="editButtons">
+                    <form action="">
+                        <input type="hidden" name="postId" value="<?php echo $row['post_id']; ?>">
+                        <button  class= "editPost" onclick="editPost(<?php echo $row['post_id']; ?>)"> <i class="fa-solid fa-pencil"> </i> </button>
+                    </form>
+                    
+                    <form action="actionButtons/deletePost.php" method="post" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="postId" value="<?php echo $row['post_id']; ?>">        
+                        <button class="deletePost"> <i class="fa-solid fa-trash"></i> </button>
+                    </form>
+                </div>
+            
+            
         </div>
 
         <div class="Post">
@@ -301,7 +415,7 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
             ?>
 
             <?php if (!empty($row['post_content'])) { ?>
-                <p><?php echo $row['post_content']; ?></p>
+                <p id = <?php echo 'post'.$row['post_id'] ?> ><?php echo $row['post_content']; ?></p>
             <?php } ?>
         </div>
         <div class="likeComments">
@@ -337,6 +451,7 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
             </div>
         
             <div id="postForm">
+                <input type="hidden" value = <?php echo $user_id; ?> name = "userID" >
                 <textarea name="postText" id="postText" placeholder="What's on your mind?"></textarea>
               
 

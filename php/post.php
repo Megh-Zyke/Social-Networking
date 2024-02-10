@@ -4,6 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     include 'connection.php';
 
+    $user_id = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : '';
     $postText = isset($_POST['postText']) ? $_POST['postText'] : '';
 
     $targetDir = 'uploads/';
@@ -24,11 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $sql = "INSERT INTO posts (post_content, post_image_path, post_date) VALUES (?, ?, NOW())";
+    $sql = "INSERT INTO posts (user_id , post_content, post_image_path, post_date) VALUES (? ,?, ?, NOW())";
     $stmt = $conn->prepare($sql);
 
 
-    $stmt->bind_param("ss", $postText, $mediaFileName);
+    $stmt->bind_param("iss", $user_id , $postText, $mediaFileName);
 
     if ($stmt->execute()) {
         header("Location: user.php");

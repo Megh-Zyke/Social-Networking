@@ -1,52 +1,64 @@
 <?php
-include 'connect.php';
-
-session_start();
+include 'connection.php';
 
 $user_id = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : '';
 
 if (isset($_POST['submit'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
-    $password = $_POST['password'];  // Don't hash it here, do it later
+    $password = $_POST['password'];  
 
+    // Prepare a statement to select user by email
     $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
-    $select_user->execute([$email]);
-    $row = $select_user->fetch(PDO::FETCH_ASSOC);
-
-    if ($select_user->rowCount() > 0) {
+    $select_user->bind_param("s", $email);
+    $select_user->execute();
+    $result = $select_user->get_result();
+    
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    if ($result->num_rows > 0) {
         // Verify password using password_verify function
         if (password_verify($password, $row['password'])) {
             if ($row['approved']) {
-                $_SESSION['user_id'] = $row['id'];
+                $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['user_name'] = $row['first_name'];
-                header('location: home.php');
+                
+                header('location: user.php');
                 exit();
             } else {
-                echo 'Need to be approved by admin';
+                $error_message = 'Need to be approved by admin';
             }
         } else {
-            echo 'Incorrect username or password!';
+            $error_message = 'Incorrect username or password!';
         }
     } else {
-        echo 'Incorrect username or password!';
+        $error_message = 'Incorrect username or password!';
     }
 }
+
+// Debugging: Display session and error message
+
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link href="login.css" rel="stylesheet">
     <style>
-        .error-message {
-            color: red;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .error-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="left-side">
@@ -78,4 +90,5 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 </body>
+
 </html>

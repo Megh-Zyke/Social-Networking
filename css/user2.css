@@ -202,6 +202,10 @@ border : solid 2px black;
     width: 50px;
 }
 
+.userInfoDetails {
+    display: flex;
+    gap: 20px;
+}
 .userImageDiv img {
     width: 100%;
     height: 100%;
@@ -210,9 +214,19 @@ border : solid 2px black;
 }
 
 
+.editButtons {
+    display: flex; 
+    align-items: center;
+}
+
+.editButtons form {
+    margin-right: 10px; 
+}
+
 .userDetails {
     margin: 5% 2%;
     display: flex;
+    justify-content: space-between;
     gap: 60px;
 }
 
@@ -237,7 +251,7 @@ border : solid 2px black;
     border-top: 2px solid black;
     border-bottom: 2px solid black; 
     font-size: x-large;
-    max-height: 300px;
+    max-height: 350px;
     padding: 4%;
     margin-top: 5%;
 }
@@ -430,13 +444,38 @@ border : solid 2px black;
 }
 
 .postImage {
-    width: 100%;
-
+    height: 250px;
 }
 
 .postImage img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 10px;
+}
+
+.editPost, .deletePost {
+    width: 50px;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    color: #030303;
+    cursor: pointer;
+}
+
+.bio {
+    width: 390px;
+}
+
+.bio textarea {
+    width: 100%;
+    padding: 3% 0;
+    border: none;
+    resize: none;
+    text-align: justify;
+    font-family: 'Ubuntu', sans-serif; 
+    font-size: 1rem;
+    max-height: 100px;
+    outline: none;
+
 }
