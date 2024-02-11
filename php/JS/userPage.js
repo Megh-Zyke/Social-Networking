@@ -53,7 +53,15 @@
         console.log("Editing post with ID: " + postId);
         var postTextElement = document.getElementById("post" + postId);
         console.log();
-        var updatedPostText = prompt("Enter the updated post text:" , postTextElement.textContent);
+        var text = postTextElement.textContent;
+        if (text === null || text === "") {
+            var updatedPostText = prompt("Enter the updated post text:" );
+        }
+        else {
+            var updatedPostText = prompt("Enter the updated post text:", text);
+        }
+        
+       
             if (updatedPostText !== null) {
             updatePost(postId, updatedPostText);
         }

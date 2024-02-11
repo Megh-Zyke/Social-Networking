@@ -324,9 +324,9 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
 
         <div class="Post">
 
-            <?php if (!empty($row['post_content'])) { ?>
+            <?php ?>
                 <p id = <?php echo 'post'.$row['post_id'] ?> ><?php echo $row['post_content']; ?></p>
-            <?php } ?>
+            <?php ?>
 
             <?php
             if (!empty($row['post_image_path'])) {
