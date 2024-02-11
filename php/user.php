@@ -116,6 +116,39 @@
     }
 
 
+    function addLike(postId) {
+        console.log("Adding like to post with ID: " + postId);
+        var xhr = new XMLHttpRequest();
+
+        var likeBtn = document.getElementById("like" + postId);
+        var color = likeBtn.style.color;
+
+        if (color == "red"){
+            likeBtn.style.color = "black";
+        } else {
+            likeBtn.style.color = "red";
+        }
+
+        xhr.open("POST", "add_like.php", true);
+        
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.error("Failed to add like: " + xhr.status);
+                }
+            }
+        };
+        
+        var data = JSON.stringify({ "post_id": postId });
+        console.log(data);
+        xhr.send(data);
+    }
+
+
       
     </script>
     
@@ -419,8 +452,28 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
             <?php } ?>
         </div>
         <div class="likeComments">
-    <div class="like">
-        <button> <i class="fa-solid fa-heart"></i> </button>
+    
+        <?php 
+
+        $likes_array = $row['likes'];
+        $likes_array = json_decode($likes_array, true);
+        if  ($likes_array == null) {
+            $likes_array = array();
+        }
+
+        $color = "black";
+        $user_index = array_search(22, $likes_array);
+
+        if ($user_index !== false) {
+            $color = "red";
+        } else {
+            $color = "black";
+        }
+
+        
+         ?> 
+    <div class="like" onclick="addLike(<?php echo $row['post_id']?>)">
+        <button> <i class="fa-solid fa-heart " id = <?php echo 'like'.$row['post_id'] ?> style = "color :  <?php echo $color ?> "></i> </button>
     </div>
     <div class="comments">
         <button> <i class="fa-solid fa-comment"></i> </button>
@@ -434,8 +487,7 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
 }
 ?>
 
-
-
+            <!-- ADD POSTS PAGE  -->
 
         </div>
 

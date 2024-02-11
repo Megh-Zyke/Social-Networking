@@ -479,3 +479,7 @@ border : solid 2px black;
     outline: none;
 
 }
+
+.active {
+    color: red;
+}
