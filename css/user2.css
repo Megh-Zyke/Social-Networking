@@ -336,7 +336,7 @@ border : solid 2px black;
 
 .usersPosts {
     flex: 1;
-    height: 142vh; /* Set the desired height */
+    height: 153vh;
     overflow-y: auto;
 }
 
