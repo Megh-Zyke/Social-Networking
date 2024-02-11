@@ -108,10 +108,7 @@ border : solid 2px black;
 }
 
 
-.userPosts {
-    max-width: 500px;
-    display: flex;
-}
+
 
 .addPosts{
     width: 95%;
@@ -224,7 +221,7 @@ border : solid 2px black;
 }
 
 .userDetails {
-    margin: 5% 2%;
+    margin:  2%;
     display: flex;
     justify-content: space-between;
     gap: 60px;
@@ -248,51 +245,50 @@ border : solid 2px black;
 }
 
 .Post {
-    border-top: 2px solid black;
-    border-bottom: 2px solid black; 
     font-size: x-large;
-    max-height: 350px;
-    padding: 4%;
-    margin-top: 5%;
+    max-height: 500px;
 }
 
 .Post p {
-    margin: 0;
-    font-size: large;
+    font-family:'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    font-weight: 200;
+    margin: 0 10px;
+    color: #313131;
 }
 
 .post {
     border: solid 2px black;
-    padding: 2%;
     border-radius: 10px;
     margin : 5% 0;
 }
 .likeComments {
     display: flex;
     gap: 10px;
-    margin: 5% 0;
+    margin: 1.5% 0;
     justify-content: space-between;
   }
   
   .likeComments button {
+    padding: 5%;
+    border-radius: 50%;
     border: none;
     background-color: transparent;
     cursor: pointer;
+    transition: .2s ease-in-out ;
   }
   .like, .comments, .share {
-   text-align: center;
+    text-align: center;
     border: none;
-    height: 20px;
     width: 33%;
     border-radius: 20px;
-    padding: 2.5%; 
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
   
-  .like:hover, .comments:hover, .share:hover {
-    background-color: #b2b2b2;
-    color: #f2f2f2; 
+  .like button:hover, .comments button:hover, .share button:hover {
+   
+    transform: scale(1.25);
 }
 
   
@@ -302,8 +298,8 @@ border : solid 2px black;
   
   /* Font Awesome Icons */
   .like i, .comments i, .share i {
-    font-size: 1rem;
-    color: rgb(21, 21, 21); /* White icon color */
+    font-size: 1.5rem;
+    color: rgb(21, 21, 21);
   }
 
 
@@ -333,7 +329,7 @@ border : solid 2px black;
 
 
 .usersPosts {
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
     overflow: auto;
 }
@@ -444,23 +440,31 @@ border : solid 2px black;
 }
 
 .postImage {
-    height: 250px;
+    width: 100%;
 }
 
 .postImage img{
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 10px;
 }
 
 .editPost, .deletePost {
-    width: 50px;
+    width: 30px;
     border: none;
     border-radius: 50px;
-    height: 50px;
+    height: 30px;
     color: #030303;
+    background-color: #fff;
     cursor: pointer;
+    transition: .2s ease-in-out ;
+}
+
+.editPost:hover, .deletePost:hover  {
+    color: #fff;
+    background-color: #0015ff;
+    border-color: #030303;
+
 }
 
 .bio {
