@@ -1,3 +1,25 @@
+<?php
+    include 'connection.php';   
+    
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: login.php');
+        exit();
+    }
+
+    $current_user_id = $_SESSION['user_id'];
+
+    
+
+    // Fetch user bio from the database
+    $select_bio = $conn->prepare("SELECT bio , profile_image_url  FROM users WHERE user_id = ?");
+    $select_bio->bind_param("i", $current_user_id);
+    $select_bio->execute();
+    $select_bio->bind_result($default_bio , $profile);
+    $select_bio->fetch();
+    $select_bio->close();
+    ?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -11,7 +33,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/user2.css">
-    <script src="https://kit.fontawesome.com/162fc093ba.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/ecb4fa4f8c.js" crossorigin="anonymous"></script>
 
     <script>
     function openPosts() {
@@ -33,62 +55,49 @@
     </header>
 
     <main>
-        <!-- User profile main content section -->
-        <!-- Add your main content here -->
-
-        <?php
-    
-    include 'connection.php';
-    
-?>
 
         <div class="mainPage">
             <div class="userInformation">
                 
-                <div class="friendRequests">
-
-                    <div class="heading">
-                        <div> <span> New Registers </span> </div>   
-                    </div>
-
-                    <div class="requests">
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-plus"></i></button>
-                            </div>
-
-                        </div>
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-plus"></i></button>
-                            </div>
-
-                        </div>
-
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="friendRequests">
+                       
+                       <div class="heading"> 
+                           <div> <span> New Users Onboard !! </span> </div>           
+                       </div>
+   
+                       <?php 
+                           //Fetch users from database
+                           $users = $conn->prepare("SELECT user_id , first_name , last_name , profile_image_url FROM users WHERE user_id != ? ORDER BY user_id DESC LIMIT 3 ");
+                           $users->bind_param("i", $current_user_id);
+                           $users->execute();
+                           $users->bind_result( $db_user_id , $first_name, $last_name,  $profile_image_url);
+   
+                       ?>
+   
+                       <div class="requests">
+                           <?php while ($users->fetch()) { ?>
+   
+                           <!-- <form action="send_requests.php" method="post"> -->
+                           
+                           <div class="friendRequest">
+                               <div class="friendRequestImage">
+                                   <img src="<?php echo $profile_image_url; ?>" alt="profile picture" class="userImage">
+                               </div>
+   
+                               <div class="friendRequestInfo">
+                                   <h2> <?php echo $first_name ." " .$last_name ?> </h2>
+                                   <button class="acceptButton" onclick = "addFriend(<?php echo $db_user_id ?>)" > <i id = "<?php echo $db_user_id ?>" class="fa-solid fa-plus <?php echo $db_user_id ?>"></i></button>
+   
+                                   <!-- <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button> -->
+                               </div>
+                           </div>
+   
+                           <!-- </form> -->
+                           
+                           <?php } ?>
+                       </div>
+   
+                   </div>
 
                 <div class="friendRequests">
 
@@ -100,45 +109,43 @@
 
                     <div class="requests">
 
+                   <?php 
+
+    
+                    $friend_requests = $conn->prepare("SELECT * FROM friend_requests JOIN users ON friend_requests.recipient_id = users.user_id WHERE sender_id = ? ");
+
+                    $friend_requests->bind_param("i", $current_user_id);
+                    $friend_requests->execute();
+                    $result = $friend_requests->get_result();
+
+                    while ($row = $result->fetch_assoc()) {
+                   ?>
                         <div class="friendRequest">
                             <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
+                                <img src="<?php echo $row['profile_image_url']?>" alt="profile picture" class="userImage">
                             </div>
 
                             <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i></button>
+                                <h2> <?php echo $row['first_name'].' '.$row['last_name'] ?> </h2>
+                                <button class="acceptButton" onclick = "confirmFriend( <?php echo $row['recipient_id']?>)"> <i class="fa-solid fa-check"></i></button>
                                 <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
                             </div>
 
-                        </div>
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
+                            <div class="accepted">
+                                <button class = "acceted_friend"> Hooray! <br> You and <?php echo $row['first_name']?> are now Friends  </button>
                             </div>
 
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i> </button>
-                                <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
-                            </div>
-
-                        </div>
-
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i> </button>
-                                <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
+                            <div class="not_accepted">
+                                <button class = "reject_friend"> You and <?php echo $row['first_name']?> are not Friends  </button>
                             </div>
                         </div>
+
+             
+                        <?php } ?>
                     </div>
+                    
                 </div>
+
 
 
                 <div class="friends">
@@ -147,109 +154,46 @@
                         <div> <span class="requests">See All Friends</span></div>
                     </div>
 
+
                     <div class="friendList">
+                        
+                    <?php 
 
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
+$friends = $conn->prepare("SELECT friends FROM users WHERE user_id = ? ");
+$friends->bind_param("i", $current_user_id);
+$friends->execute();
+$friends->bind_result($friends_list);
+$friends->fetch();
 
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
+$friends_array = json_decode($friends_list, true);
 
-                        </div>
+if ($friends_array == null) {
+    $friends_array = array();
+}
+$friends->close();
 
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
+foreach ($friends_array as $friend) {
+    $get_friend = $conn->prepare("SELECT * FROM users WHERE user_id = ? ");
+    $get_friend->bind_param("i", $friend);
+    $get_friend->execute();
+    $result = $get_friend->get_result();
+    $row = $result->fetch_assoc();
 
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
+?>
 
-                        </div>
+<div class="friend">
+    <div class="friendImage">
+        <img src="<?php echo $row['profile_image_url']; ?>" alt="profile picture" class="userImage">
+    </div>
 
+    <div class="friendsInfo">
+        <h2><?php echo $row['first_name']. ' ' . $row['last_name'] ?></h2>
+    </div>
 
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
-                        </div>
+</div>
 
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
-
-                        </div>
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-
-                            </div>
-                        </div>
-
-
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
-
-                        </div>
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="friend">
-                            <div class="friendImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendsInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                            </div>
-                        </div>
+<?php } ?>
+                     
                     </div>
                 </div>
 
@@ -298,32 +242,36 @@
                 <div class="usersPosts">
 
                     <?php
-    $sql = "SELECT * FROM posts ORDER BY post_date ASC";
-    $result = $conn->query($sql);
+                    $sql = "SELECT * 
+                    FROM posts
+                    JOIN users ON posts.user_id = users.user_id
+                    ORDER BY posts.post_date DESC";
 
-    $posts = array();
 
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = $row;
-    }
+$result = $conn->query($sql);
 
-    foreach ($posts as $post) {
-        $postId = isset($post['post_id']) ? $post['post_id'] : null;
-    ?>
+$posts = array();
 
+while ($row = $result->fetch_assoc()) {
+    $posts[] = $row;
+}
+
+foreach ($posts as $row) {
+    $postId = isset($row['post_id']) ? $row['post_id'] : null;
+?>
                     <div class="post">
                         <div class="userDetails">
                             <div class="userImageDiv">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImageImg">
+                                <img src=<?php echo $row['profile_image_url']; ?>  alt="profile picture" class="userImageImg">
                             </div>
                             <div>
                                 <div class="userName">
-                                    <h2>Sakuta Azusagawa</h2>
+                                    <h2><?php echo $row['first_name']. ' ' . $row['last_name'] ?></h2>
                                 </div>
                                 <div class="date">
                                     <?php
-                        $postDate = new DateTime($post['post_date']);
-                        echo $postDate->format('d-m-Y');
+                                    $postDate = new DateTime($row['post_date']);
+                                    echo $postDate->format('d-m-Y');
                         ?>
                                 </div>
                             </div>
@@ -331,17 +279,17 @@
 
                         <div class="Post">
                             <?php
-                if (!empty($post['post_image_path'])) {
+                if (!empty($row['post_image_path'])) {
                 ?>
                             <div class="postImage">
-                                <img src="<?php echo $post['post_image_path']; ?>" alt="Post Image">
+                                <img src="<?php echo $row['post_image_path']; ?>" alt="Post Image">
                             </div>
                             <?php
                 }
                 ?>
 
-                            <?php if (!empty($post['post_content'])) { ?>
-                            <p><?php echo $post['post_content']; ?></p>
+                            <?php if (!empty($row['post_content'])) { ?>
+                            <p><?php echo $row['post_content']; ?></p>
                             <?php } ?>
                         </div>
                         <div class="likeComments">
@@ -435,6 +383,8 @@
         }
     }
     </script>
+
+<script src="JS/userPage.js"></script>
 
 
 </body>

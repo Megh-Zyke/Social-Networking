@@ -6,20 +6,17 @@
         exit();
     }
 
-    $user_id = $_SESSION['user_id'];
+    $current_user_id = $_SESSION['user_id'];
 
     
 
     // Fetch user bio from the database
-    $user_id = $_SESSION['user_id'];
     $select_bio = $conn->prepare("SELECT bio , profile_image_url  FROM users WHERE user_id = ?");
-    $select_bio->bind_param("i", $user_id);
+    $select_bio->bind_param("i", $current_user_id);
     $select_bio->execute();
     $select_bio->bind_result($default_bio , $profile);
     $select_bio->fetch();
     $select_bio->close();
-
-
     ?>
 
 <!DOCTYPE html>
@@ -71,47 +68,39 @@
                         
                     </div>
 
+                    <?php 
+                        //Fetch users from database
+                        $users = $conn->prepare("SELECT user_id , first_name , last_name , profile_image_url FROM users WHERE user_id != ? ORDER BY user_id DESC LIMIT 3 ");
+                        $users->bind_param("i", $current_user_id);
+                        $users->execute();
+                        $users->bind_result( $db_user_id , $first_name, $last_name,  $profile_image_url);
+
+                    ?>
+
                     <div class="requests">
+                        <?php while ($users->fetch()) { ?>
 
+                        <!-- <form action="send_requests.php" method="post"> -->
+                        
                         <div class="friendRequest">
                             <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
+                                <img src="<?php echo $profile_image_url; ?>" alt="profile picture" class="userImage">
                             </div>
 
                             <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i></button>
-                                <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
-                            </div>
+                                <h2> <?php echo $first_name ." " .$last_name ?> </h2>
+                                <button class="acceptButton" onclick = "addFriend(<?php echo $db_user_id ?>)" > <i id = "<?php echo $db_user_id ?>" class="fa-solid fa-plus <?php echo $db_user_id ?>"></i></button>
 
-                        </div>
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i> </button>
-                                <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
-                            </div>
-
-                        </div>
-
-
-                        <div class="friendRequest">
-                            <div class="friendRequestImage">
-                                <img src="../images/profilePicture.png" alt="profile picture" class="userImage">
-                            </div>
-                            <div class="friendRequestInfo">
-                                <h2> Sakuta Azusagawa </h2>
-                                <button class="acceptButton"> <i class="fa-solid fa-check"></i> </button>
-                                <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button>
+                                <!-- <button class="declineButton"> <i class="fa-solid fa-cancel"></i> </button> -->
                             </div>
                         </div>
+
+                        <!-- </form> -->
+                        
+                        <?php } ?>
                     </div>
-                   </div>
+
+                </div>
 
 
                 <div class="friends">
@@ -270,15 +259,18 @@
                 <div class="usersPosts">
 
                 <?php
-$sql = "SELECT * FROM posts, users where posts.user_id = users.user_id ORDER BY post_date ASC";
+                $sql = "SELECT * FROM posts, users where posts.user_id = $current_user_id and users.user_id = $current_user_id ORDER BY post_date DESC";
 
-$result = $conn->query($sql);
+                $result = $conn->query($sql);
 
-$posts = array();
+                $posts = array();
 
-while ($row = $result->fetch_assoc()) {
-    $posts[] = $row;
-}
+                while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+                }
+
+
+                
 
 for ($i = count($posts) - 1; $i >= 0; $i--) {
     $row = $posts[$i];
@@ -392,7 +384,7 @@ for ($i = count($posts) - 1; $i >= 0; $i--) {
             </div>
         
             <div id="postForm">
-                <input type="hidden" value = <?php echo $user_id; ?> name = "userID" >
+                <input type="hidden" value = <?php echo $current_user_id; ?> name = "userID" >
                 <textarea name="postText" id="postText" placeholder="What's on your mind?"></textarea>
               
 

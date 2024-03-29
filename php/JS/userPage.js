@@ -118,3 +118,100 @@
         xhr.send(data);
     }
 
+    function addFriend(user_Id) {
+        console.log("Adding Friend Id " + user_Id);
+        var xhr = new XMLHttpRequest();
+
+        var acceptButton = document.getElementById(user_Id);
+        console.log(acceptButton)
+    
+        acceptButton.classList.remove('fa-plus');
+        acceptButton.classList.add('fa-check');
+        xhr.open("POST", "send_requests.php", true);
+        
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.error("Failed to add friend : " + xhr.status);
+                }
+            }
+        };
+        
+        var data = JSON.stringify({ "user_id": user_Id });
+        console.log(data);
+        xhr.send(data);
+    }
+
+
+    function confirmFriend(user_Id) {
+        console.log("Confirm Friend Id " + user_Id);
+        var xhr = new XMLHttpRequest();
+
+
+        var acceptButton = document.getElementById("Friend"+user_Id);
+        acceptButton.style.display = "none";
+
+        var confimButton = document.getElementById("accepted"+user_Id);
+        confimButton.style.display = "block";
+        xhr.open("POST", "confirm_friends.php", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.error("Failed to add friend : " + xhr.status);
+                }
+            }
+        };
+        
+        var data = JSON.stringify({ "user_id": user_Id });
+        console.log(data);
+        xhr.send(data);
+    }
+
+
+    // var acceptButtons = document.querySelectorAll('.acceptButton');
+
+    //     acceptButtons.forEach(function(button) {
+    //         button.addEventListener('click', function() {
+    //             // Get the sender user ID from the hidden input field
+    //             var icon = this.querySelector('i');
+            
+    //             // Check the current class of the icon
+    //             if (icon.classList.contains('fa-plus')) {
+    //                 // If it's the plus icon, change it to another icon
+    //                 icon.classList.remove('fa-plus');
+    //                 icon.classList.add('fa-check');
+    //             } else {
+    //                 // If it's another icon, change it back to the plus icon
+    //                 icon.classList.remove('fa-check');
+    //                 icon.classList.add('fa-plus');
+    //             }
+
+    //             var senderUserId = this.parentElement.parentElement.querySelector('.senderUserId').value;
+    //             // Send AJAX request to post_page.php
+    //             var xhr = new XMLHttpRequest();
+    //             xhr.open('POST', 'send_requests.php', true);
+    //             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //             xhr.onreadystatechange = function() {
+    //                 if (xhr.readyState === XMLHttpRequest.DONE) {
+    //                     if (xhr.status === 200) {
+    //                         // Request successful
+    //                         // Handle response if needed
+    //                         console.log(xhr.responseText);
+    //                     } else {
+    //                         // Error occurred
+    //                         console.error('Error:', xhr.status);
+    //                     }
+    //                 }
+    //             };
+    //             xhr.send('senderUserId=' + encodeURIComponent(senderUserId));
+    //         });
+    //     });
