@@ -43,6 +43,44 @@ include 'navbar.php';
     </div>
 
     <div class="users_search">
+        <div class="search_results">
+            <div class="search_results_title">
+                <h2>Search Results</h2>
+            </div>
+            <div class="search_results_list">
+                <?php
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            
+                    $search_query = $_GET['search'];
+                    if (empty($search_query)) {
+                        $search_query = "";
+                    }
+                    $search_query = '%' . $search_query . '%';
+
+                    $search_users = $conn->prepare("SELECT user_id, first_name, last_name, profile_image_url FROM users WHERE first_name LIKE ? OR last_name LIKE ?");
+                    $search_users->bind_param("ss", $search_query, $search_query);
+                    $search_users->execute();
+                    $search_users->bind_result($user_id, $first_name, $last_name, $profile_image_url);
+
+                    while ($search_users->fetch()) {
+                        echo '<div class="search_result">';
+                        echo '<div class="search_result_image">';
+                        echo '<img src="' . $profile_image_url . '" alt="UserImage">';
+                        echo '</div>';
+                        echo '<div class="search_result_name">';
+                        echo '<p>' . $first_name . ' ' . $last_name . '</p>';
+                        echo '</div>';
+                        echo '<div class="search_result_button">';
+                        echo '<button class="add_friend_button" onclick="sendRequest(' . $user_id . ')">Add Friend</button>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+
+                    $search_users->close();
+                }
+                ?>
+            </div>
+        </div>
     </div>
 </div>
 

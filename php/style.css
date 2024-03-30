@@ -61,15 +61,24 @@
     grid-template-columns: 300px auto;
     gap: 10px;
     padding: 0px;
-    background-color: #8cecff;
-
+    background-color: #caf0f8;
 }
+
+.search-grid .info , .search-grid .users_search{
+    height: 90vh;
+    background-color: #8cecff;
+}
+
+.search-grid .users_search{
+    margin-left: 5%;
+}
+
 .home-grid>div {
     background-color: #caf0f8;
     height: 87.5vh;
 }
 
-.home-grid .posts {
+.home-grid .posts  {
     background-color: #8cecff;
 }
 
@@ -532,4 +541,29 @@ input::file-selector-button:hover,
     background-color: #fff;
     cursor: pointer;
     transition: .2s ease-in-out ;
+}
+
+
+.search_results_list {
+    display: flex;
+    gap: 10px;
+    padding: 5%;
+    overflow-y: scroll;
+    max-width: 65vw;
+    margin: 10%;
+
+}
+
+.search_result_image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.search_result_image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 }
