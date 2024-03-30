@@ -504,3 +504,23 @@ input::file-selector-button:hover,
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     z-index: 999; /* Ensure the overlay appears above other content */
 }
+
+.editButtons {
+    display: flex; 
+    align-items: center;
+}
+
+.editButtons form {
+    margin-right: 10px; 
+}
+
+.editPost, .deletePost {
+    width: 30px;
+    border: none;
+    border-radius: 50px;
+    height: 30px;
+    color: #030303;
+    background-color: #fff;
+    cursor: pointer;
+    transition: .2s ease-in-out ;
+}

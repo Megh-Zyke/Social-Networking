@@ -24,7 +24,7 @@ include 'navbar.php';
 <div class="home-grid">
     <div class="info">
         <?php
-        include 'right_grid.php';
+        include 'home_left.php';
         ?>
     </div>
 
@@ -38,8 +38,7 @@ include 'navbar.php';
         <?php
         $sql = "SELECT * 
                     FROM posts
-                    JOIN users ON posts.user_id = users.user_id
-                    ORDER BY posts.post_date DESC";
+                    JOIN users ON posts.user_id = users.user_id  ";
 
 
         $result = $conn->query($sql);
@@ -50,7 +49,7 @@ include 'navbar.php';
             $posts[] = $row;
         }
 
-        foreach ($posts as $row) {
+        foreach (array_reverse($posts) as $row) {
             $postId = isset($row['post_id']) ? $row['post_id'] : null;
             ?>
             <!-- post template start -->
@@ -63,36 +62,31 @@ include 'navbar.php';
                             <img src=<?php echo $row['profile_image_url']; ?> alt="" class="user_post_profile_img">
                         </div>
 
-                        <div class="user_post_username">
-                            <p class="user_post_username_text">
-                                <?php echo $row['first_name'] . ' ' . $row['last_name'] ?>
-                            </p>
+                        <div>
+                            <div class="user_post_username">
+                                <p class="user_post_username_text">
+                                    <?php echo $row['first_name'] . ' ' . $row['last_name'] ?>
+                                </p>
+                            </div>
+
+                            <div class="date">
+                                <?php
+                                $postDate = new DateTime($row['post_date']);
+                                echo $postDate->format('d-m-Y');
+                                ?>
+                            </div>
+
                         </div>
 
-                    </div>
-
-                    <div class="date">
-                        <?php
-                        $postDate = new DateTime($row['post_date']);
-                        echo $postDate->format('d-m-Y');
-                        ?>
                     </div>
 
                 </div>
 
 
                 <div class="post_content">
-                    <?php
-                    if (!empty($row['post_image_path'])) {
-                        ?>
+                    <img src="<?php echo $row['post_image_path']; ?>" alt="" class="post_content_img">
+                </div>
 
-
-                        <img src="<?php echo $row['post_image_path']; ?>" alt="" class="post_content_img">
-                    </div>
-
-                    <?php
-                    }
-                    ?>
                 <?php if (!empty($row['post_content'])) { ?>
 
 
@@ -222,7 +216,8 @@ include 'navbar.php';
                             </div>
 
                             <div class="cancel">
-                                <button class="declineButton"  onclick="deleteFriend(<?php echo $row['recipient_id'] ?>)"> <i class="fa-solid fa-cancel"></i> </button>
+                                <button class="declineButton" onclick="deleteFriend(<?php echo $row['recipient_id'] ?>)"> <i
+                                        class="fa-solid fa-cancel"></i> </button>
                             </div>
                         </div>
 
@@ -231,7 +226,7 @@ include 'navbar.php';
                             </button>
                         </div>
 
-                        <div class="not_accepted"  id=<?php echo "reject" . $row['recipient_id'] ?>>
+                        <div class="not_accepted" id=<?php echo "reject" . $row['recipient_id'] ?>>
                             <button class="reject_friend"> Request canceled.
                             </button>
                         </div>

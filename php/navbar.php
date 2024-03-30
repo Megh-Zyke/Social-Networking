@@ -1,6 +1,6 @@
 <div class="navbar">
     <div class="heading">
-        <a href="index.php" class= "heading">Social Networking</a>
+        <a href="home.php" class= "heading">Social Networking</a>
     </div>
 
     <div class="search_bar">
