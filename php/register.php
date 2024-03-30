@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
         echo 'Error uploading image. Please try again.';
         exit();
     }
-
+    
     $select_user = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $select_user->bind_param("s", $email);
     $select_user->execute();

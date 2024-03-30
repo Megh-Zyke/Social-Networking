@@ -62,13 +62,20 @@ include 'navbar.php';
             $friends_array = array();
         }
         $friends->close();
-
-        foreach (array_reverse($friends_array) as $friend) {
-            $get_friend = $conn->prepare("SELECT * FROM posts JOIN users on users.user_id = ?  and posts.user_id = ?");
+        
+        $friends_array[] = $current_user_id;
+        foreach (($friends_array) as $friend) {
+            $get_friend = $conn->prepare("SELECT * FROM posts JOIN users on (users.user_id = ?  and posts.user_id = ?)");
             $get_friend->bind_param("ii", $friend,$friend);
             $get_friend->execute();
             $result = $get_friend->get_result();
-            $row = $result->fetch_assoc();
+            
+
+            while($row = $result->fetch_assoc()){
+
+            if($row == null) {
+                continue;
+            }
 
             ?>
 
@@ -116,6 +123,7 @@ include 'navbar.php';
                         </p>
                     </div>
                 <?php } ?>
+            
 
 
                 <div class="post_buttons">
@@ -153,6 +161,7 @@ include 'navbar.php';
                 </div>
             </div>
 
+        <?php } ?>
         <?php } ?>
         <!-- post template done -->
 
