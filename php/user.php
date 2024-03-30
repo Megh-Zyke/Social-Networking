@@ -17,6 +17,23 @@ $select_bio->bind_result($default_bio, $profile, $first_name, $last_name);
 $select_bio->fetch();
 $select_bio->close();
 
+$friends_number = $conn->prepare("SELECT users.friends , COUNT(posts.post_id)  
+                                FROM users
+                                JOIN posts ON users.user_id = ? AND posts.user_id = ?");
+$friends_number->bind_param("ii", $current_user_id, $current_user_id);
+$friends_number->execute();
+$friends_number->bind_result($friends_count_list, $posts_count);
+$friends_number->fetch();
+$friends_number->close();
+$decoded_friends = json_decode($friends_count_list, true); 
+
+if ($decoded_friends == null) {
+    $decoded_friends = array();
+}
+
+$friends_count = count($decoded_friends);
+
+
 include 'header.php';
 include 'navbar.php';
 ?>

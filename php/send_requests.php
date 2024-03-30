@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Insert a new row into the friend_requests table to represent the received request
         $insert_request = $conn->prepare("INSERT INTO friend_requests (sender_id, recipient_id) VALUES (?, ?)");
-        $insert_request->bind_param("ii", $user_id, $senderUserId);
+        $insert_request->bind_param("ii", $senderUserId , $user_id);
         if ($insert_request->execute()) {
             // Request successfully received and inserted into the database
             echo json_encode(['success' => true]);

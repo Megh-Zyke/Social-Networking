@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
     } else {
         $bio = "Hi " . $first_name . " " . $last_name;
         $insert_user = $conn->prepare("INSERT INTO users (first_name, last_name, email, password, date_of_birth, gender, profile_image_url,bio, approved) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?)");
-        $approved = 1; // Assuming $approved is defined elsewhere
+        $approved = 0; // Assuming $approved is defined elsewhere
         $insert_user->bind_param("ssssssssi", $first_name, $last_name, $email, $password, $date_of_birth, $gender, $profile_image_url,$bio, $approved);
         $insert_user->execute();
     
@@ -56,6 +56,7 @@ if (isset($_POST['submit'])) {
             exit();
         } else {
             echo 'Registration failed. Please try again.';
+            echo $conn->error;
         }
     }
 }

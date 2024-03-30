@@ -23,7 +23,7 @@
         </div>
 
         <div class="user_posts_count">
-            0
+            <?php echo $friends_count ?>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
 
         </div>
         <div class="user_friends_count">
-            0
+            <?php echo $posts_count ?>
         </div>
     </div>
 
