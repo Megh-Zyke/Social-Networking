@@ -25,7 +25,7 @@ $friends_number->execute();
 $friends_number->bind_result($friends_count_list, $posts_count);
 $friends_number->fetch();
 $friends_number->close();
-$decoded_friends = json_decode($friends_count_list, true); 
+$decoded_friends = json_decode($friends_count_list, true);
 if ($decoded_friends == null) {
     $decoded_friends = array();
 }
@@ -50,22 +50,28 @@ include 'navbar.php';
 
 
         <?php
-        $sql = "SELECT * 
-                    FROM posts
-                    JOIN users ON posts.user_id = users.user_id  ";
+        $friends = $conn->prepare("SELECT friends FROM users WHERE user_id = ? ");
+        $friends->bind_param("i", $current_user_id);
+        $friends->execute();
+        $friends->bind_result($friends_list);
+        $friends->fetch();
 
+        $friends_array = json_decode($friends_list, true);
 
-        $result = $conn->query($sql);
-
-        $posts = array();
-
-        while ($row = $result->fetch_assoc()) {
-            $posts[] = $row;
+        if ($friends_array == null) {
+            $friends_array = array();
         }
+        $friends->close();
 
-        foreach (array_reverse($posts) as $row) {
-            $postId = isset($row['post_id']) ? $row['post_id'] : null;
+        foreach (array_reverse($friends_array) as $friend) {
+            $get_friend = $conn->prepare("SELECT * FROM posts JOIN users on users.user_id = ?  and posts.user_id = ?");
+            $get_friend->bind_param("ii", $friend,$friend);
+            $get_friend->execute();
+            $result = $get_friend->get_result();
+            $row = $result->fetch_assoc();
+
             ?>
+
             <!-- post template start -->
             <div class="post_template">
 
