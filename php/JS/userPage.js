@@ -2,10 +2,14 @@
         function openPosts() {
             console.log("open");
             document.querySelector(".addPostsPage").style.display = "block";
+            document.getElementById("modalOverlay").style.display = "block";
+        
         }
-    
+        
+
         function closePage() {
             document.querySelector(".addPostsPage").style.display = "none";
+            document.getElementById("modalOverlay").style.display = "none";
         }
 
         function confirmDelete() {
@@ -175,6 +179,38 @@
         console.log(data);
         xhr.send(data);
     }
+
+    function deleteFriend(user_Id) {
+        console.log("Cancel Friend Id " + user_Id);
+        var xhr = new XMLHttpRequest();
+
+
+        var acceptButton = document.getElementById("Friend"+user_Id);
+        acceptButton.style.display = "none";
+
+        var confimButton = document.getElementById("reject"+user_Id);
+        confimButton.style.display = "block";
+        
+
+        // xhr.open("POST", "confirm_friends.php", true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        
+
+        // xhr.onreadystatechange = function() {
+        //     if (xhr.readyState === XMLHttpRequest.DONE) {
+        //         if (xhr.status === 200) {
+        //             console.log(xhr.responseText);
+        //         } else {
+        //             console.error("Failed to add friend : " + xhr.status);
+        //         }
+        //     }
+        // };
+        
+        // var data = JSON.stringify({ "user_id": user_Id });
+        // console.log(data);
+        // xhr.send(data);
+    }
+
 
 
     // var acceptButtons = document.querySelectorAll('.acceptButton');
