@@ -57,7 +57,7 @@ include 'navbar.php';
                     }
                     $search_query = '%' . $search_query . '%';
 
-                    $search_users = $conn->prepare("SELECT user_id, first_name, last_name, profile_image_url FROM users WHERE first_name LIKE ? OR last_name LIKE ?");
+                    $search_users = $conn->prepare("SELECT user_id, first_name, last_name, profile_image_url FROM users WHERE first_name LIKE ? OR last_name LIKE ? order by user_id desc");
                     $search_users->bind_param("ss", $search_query, $search_query);
                     $search_users->execute();
                     $search_users->bind_result($user_id, $first_name, $last_name, $profile_image_url);
@@ -68,10 +68,15 @@ include 'navbar.php';
                         echo '<img src="' . $profile_image_url . '" alt="UserImage">';
                         echo '</div>';
                         echo '<div class="search_result_name">';
-                        echo '<p>' . $first_name . ' ' . $last_name . '</p>';
+                        echo '<h2>' . $first_name . ' ' . $last_name . '</h2>';
                         echo '</div>';
                         echo '<div class="search_result_button">';
-                        echo '<button class="add_friend_button" onclick="sendRequest(' . $user_id . ')">Add Friend</button>';
+                        echo '<div>';
+                        echo '<button class="add_friend_button" onclick="sendRequest(' . $user_id . ')"> <i class="fa-solid fa-plus"></i> </button>';
+                        echo '</div>';
+                        echo '<div>';
+                        echo '<button class="add_friend_button" onclick=""> <i class="fa-solid fa-magnifying-glass"></i> </button>';
+                        echo '</div>';
                         echo '</div>';
                         echo '</div>';
                     }

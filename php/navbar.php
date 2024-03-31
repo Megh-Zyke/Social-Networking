@@ -4,7 +4,7 @@
     </div>
 
     <div class="search_bar">
-        <form action= "" method="GET">
+        <form action= "search_page.php" method="GET">
             <input type="text" name="search" placeholder="Search">
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
