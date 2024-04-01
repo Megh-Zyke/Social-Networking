@@ -181,3 +181,18 @@ button:hover {
 .date{
     text-align: left;
 }
+
+
+@media screen and (max-width: 500px) {
+    body {
+        background: linear-gradient(to top,#3498db 75% , #ffffff 25%);
+    }
+
+    .container {
+        flex-direction: column;
+        transform: scale(0.85);
+        border-radius: 30px;
+        padding-bottom: 3%;
+    }
+    
+}

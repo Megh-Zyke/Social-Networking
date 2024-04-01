@@ -577,3 +577,27 @@ input::file-selector-button:hover,
     display: flex;
     justify-content: space-around;
 }
+
+
+@media screen and (max-width: 500px) {
+
+    .home-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info , .info2 {
+        display: none;
+    }
+
+    .posts{
+        margin: 0;
+    }
+    .post_template {
+        border-radius: 30px;
+    }
+    .posts::-webkit-scrollbar {
+        width: 0px;
+    }
+    
+}
