@@ -89,3 +89,6 @@ include 'navbar.php';
     </div>
 </div>
 
+<?php
+include "mobile_tabbar.php";
+?>

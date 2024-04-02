@@ -25,7 +25,7 @@ $friends_number->execute();
 $friends_number->bind_result($friends_count_list, $posts_count);
 $friends_number->fetch();
 $friends_number->close();
-$decoded_friends = json_decode($friends_count_list, true); 
+$decoded_friends = json_decode($friends_count_list, true);
 
 if ($decoded_friends == null) {
     $decoded_friends = array();
@@ -323,6 +323,10 @@ include 'navbar.php';
     </div>
 </div>
 
+<?php
+include "mobile_tabbar.php";
+?>
+
 <script>
     document.getElementById('mediaButton').addEventListener('change', previewImage);
 
@@ -341,6 +345,8 @@ include 'navbar.php';
             reader.readAsDataURL(imageInput.files[0]);
         }
     }
+
+
 
 </script>
 <script src="JS/userPage.js"></script>

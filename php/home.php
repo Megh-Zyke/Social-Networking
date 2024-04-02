@@ -320,6 +320,11 @@ include 'navbar.php';
     </div>
 </div>
 
+<?php
+include "mobile_tabbar.php";
+?>
+
+
 <script>
     document.getElementById('mediaButton').addEventListener('change', previewImage);
 
