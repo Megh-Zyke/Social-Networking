@@ -14,7 +14,7 @@ if (isset($_POST['user_id'])) {
     include 'connect.php';
 
     // Update the user's 'approved' status in the database
-    $update_user = $conn->prepare("UPDATE `users` SET approved = 1 WHERE id = ?");
+    $update_user = $conn->prepare("UPDATE `users` SET approved = 1 WHERE user_id = ?");
     $update_user->execute([$user_id]);
 
     if ($update_user->rowCount() > 0) {
