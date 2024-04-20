@@ -10,6 +10,7 @@ $pending_users = $conn->query("SELECT * FROM `users` WHERE approved = 0")->fetch
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +51,8 @@ $pending_users = $conn->query("SELECT * FROM `users` WHERE approved = 0")->fetch
         margin-top: 20px;
     }
 
-    th, td {
+    th,
+    td {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #ddd;
@@ -73,7 +75,7 @@ $pending_users = $conn->query("SELECT * FROM `users` WHERE approved = 0")->fetch
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        margin-bottom:15px;
+        margin-bottom: 15px;
     }
 
     button:hover {
@@ -86,44 +88,46 @@ $pending_users = $conn->query("SELECT * FROM `users` WHERE approved = 0")->fetch
     }
     </style>
 </head>
+
 <body>
     <h1>Admin Panel - Pending Registrations</h1>
 
     <?php if ($pending_users && !empty($pending_users)): ?>
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date of Birth</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($pending_users as $user): ?>
-                        <tr>
-                            <td><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></td>
-                            <td><?php echo $user['email']; ?></td>
-                            <td><?php echo $user['date_of_birth']; ?></td>
-                            <td>
-                                <form action="approve_user.php" method="post">
-                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                    <button type="submit" name="approve">Approve</button>
-                                </form>
-                                <form action="reject_user.php" method="post">
-                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                    <button type="submit" name="reject">Reject</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pending_users as $user): ?>
+                <tr>
+                    <td><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></td>
+                    <td><?php echo $user['email']; ?></td>
+                    <td><?php echo $user['date_of_birth']; ?></td>
+                    <td>
+                        <form action="approve_user.php" method="post">
+                            <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
+                            <button type="submit" name="approve">Approve</button>
+                        </form>
+                        <form action="reject_user.php" method="post">
+                            <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
+                            <button type="submit" name="reject">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
     <?php else: ?>
-        <p>No pending registrations.</p>
+    <p>No pending registrations.</p>
     <?php endif; ?>
 
 </body>
+
 </html>
