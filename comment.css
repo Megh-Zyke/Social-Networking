@@ -1,0 +1,95 @@
+
+.comments {
+    margin-top: 10px;
+}
+
+.comment_item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+
+.comment_user {
+    display: flex;
+    align-items: center;
+}
+
+.comment_user img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* to make the image circular */
+    margin-right: 10px;
+}
+
+.comment_user span {
+    font-weight: bold;
+    color: #333;
+}
+
+.comment_text p {
+    margin: 5px 0;
+}
+
+.comment_date span {
+    color: #888;
+    font-size: 0.9em;
+}
+
+
+/* Style for the comment form */
+form.comment_form {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.comment_form input[type="text"] {
+    flex: 1;
+    /* Take remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+
+.comment_form button[type="submit"] {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.comment_form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.comment_form input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.see_all_comments_button {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.see_all_comments_button_btn {
+    background-color: #4CAF50;
+    /* Green background */
+    border: none;
+    /* Remove borders */
+    color: white;
+    /* White text */
+    padding: 10px 20px;
+    /* Some padding */
+    cursor: pointer;
+    /* Pointer cursor */
+    border-radius: 5px;
+}
+
+.see_all_comments_button_btn:hover {
+    background-color: #45a049;
+
+}

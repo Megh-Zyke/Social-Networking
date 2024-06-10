@@ -1,0 +1,249 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.post_details_container {
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Post Details Styles */
+.post_details {
+    margin-bottom: 30px;
+}
+
+.user_info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile_picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user_name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.post_date {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.post_content {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.post_image {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Comments Styles */
+.comments_container {
+    margin-top: 20px;
+}
+
+.comment {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comment .user_info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment .profile_picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.commenter_name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.comment_date {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.comment_content {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .post_details_container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .user_info, .comment .user_info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile_picture, .comment .profile_picture {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.post_details_container {
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Post Details Styles */
+.post_details {
+    margin-bottom: 30px;
+}
+
+.user_info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile_picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user_name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.post_date {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.post_content {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.post_image {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Comments Styles */
+.comments_container {
+    margin-top: 20px;
+}
+
+.comment {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comment .user_info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment .profile_picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.commenter_name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.comment_date {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.comment_content {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .post_details_container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .user_info, .comment .user_info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile_picture, .comment .profile_picture {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
